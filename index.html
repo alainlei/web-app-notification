@@ -14,15 +14,19 @@
             return registration;
         }
 
+        const publicKey = 'BAp4s7ddKEtnQHq3uZk2l3yInudMlxREgAyVuPjXvOgvPNuJal4gT1bO6LqcljwS78UXbsL839N_pBo64Hj7y0w';
+        
         // 2. Request Permission and Subscribe
         async function subscribeUser() {
-            const permission = await Notification.requestPermission();
-            if (permission === 'granted') {
-                const registration = await registerSW();
-                // In a real app, you'd send this 'subscription' object to your server
-                console.log('User is subscribed:', registration);
-                alert('Notifications Enabled!');
-            }
+            const registration = await navigator.serviceWorker.ready;
+            const subscription = await registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array(publicKey)
+            });
+        
+            // CRITICAL: You must copy this JSON from your browser console!
+            console.log(JSON.stringify(subscription));
+            alert("Check console for subscription object!");
         }
     </script>
 </body>
