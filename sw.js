@@ -1,19 +1,14 @@
-self.addEventListener('push', function(event) {
-    const options = {
-        body: event.data ? event.data.text() : 'You have a new message!',
-        icon: 'icon.png', // Path to a small logo
-        badge: 'badge.png', // Path to a monochrome icon for the status bar
-        vibrate: [100, 50, 100],
-        data: { url: 'https://alainlei.github.io/web-app-notification/' }
-    };
-
-    event.waitUntil(
-        self.registration.showNotification('Hello from Gemini!', options)
-    );
+self.addEventListener('push', e => {
+    const data = e.data.json();
+    self.registration.showNotification(data.title, {
+        body: data.body,
+        icon: '/icon.png'
+    });
 });
 
-// Open the web app when the notification is clicked
-self.addEventListener('notificationclick', function(event) {
+self.addEventListener('notificationclick', event => {
     event.notification.close();
-    event.waitUntil(clients.openWindow(event.notification.data.url));
+    event.waitUntil(
+        clients.openWindow("/") // Opens your app when clicked
+    );
 });
