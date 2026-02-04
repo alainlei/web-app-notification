@@ -4,7 +4,7 @@ self.addEventListener('push', function(event) {
         icon: 'icon.png', // Path to a small logo
         badge: 'badge.png', // Path to a monochrome icon for the status bar
         vibrate: [100, 50, 100],
-        data: { url: 'https://yourwebsite.com' }
+        data: { url: 'https://alainlei.github.io/web-app-notification/' }
     };
 
     event.waitUntil(
