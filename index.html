@@ -27,20 +27,37 @@
         }
 
         async function subscribe() {
-            // 1. Register Service Worker
-            const register = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
-            
-            // 2. Wait for it to be ready
-            const serviceWorker = await navigator.serviceWorker.ready;
+            console.log("Starting registration...");
+    
+    if (!('serviceWorker' in navigator)) {
+        alert("Service Workers not supported in this browser.");
+        return;
+    }
 
-            // 3. Subscribe the user
-            const subscription = await serviceWorker.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
-            });
+    try {
+        const register = await navigator.serviceWorker.register('./sw.js');
+        console.log("Service Worker Registered");
 
-            console.log("SUBSCRIPTION OBJECT (Copy this):", JSON.stringify(subscription));
-            alert("Subscribed! Copy the JSON from the console.");
+        const permission = await Notification.requestPermission();
+        alert("Permission status: " + permission);
+
+        if (permission !== 'granted') {
+            alert("You denied notification permissions!");
+            return;
+        }
+
+        const subscription = await register.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
+        });
+
+        console.log("Full Subscription:", JSON.stringify(subscription));
+        alert("Success! Check console for ID.");
+        
+    } catch (error) {
+        console.error("Error during subscription:", error);
+        alert("Error: " + error.message);
+    }
         }
 
         document.getElementById('sub-btn').addEventListener('click', () => {
