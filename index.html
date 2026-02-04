@@ -10,6 +10,7 @@
     <h1>Push Notifier</h1>
     <button id="sub-btn">Enable Notifications</button>
     <p>Check your browser console after clicking.</p>
+    <div id="sub-text"></div>
 
     <script>
         const publicVapidKey = 'BAp4s7ddKEtnQHq3uZk2l3yInudMlxREgAyVuPjXvOgvPNuJal4gT1bO6LqcljwS78UXbsL839N_pBo64Hj7y0w'; // Replace this later
@@ -52,6 +53,8 @@
         });
 
         console.log("Full Subscription:", JSON.stringify(subscription));
+        const element = document.getElementById("sub-text");
+        element.textContent = JSON.stringify(subscription);
         alert("Success! Check console for ID.");
         
     } catch (error) {
